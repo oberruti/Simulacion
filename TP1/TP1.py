@@ -8,7 +8,7 @@ min_ruleta = 0
 max_ruleta = 36
 numeros_ruleta = 37.0
 valor_estadistico_ruleta = 1.0/37.0
-
+valor_promedio_esperado = 37.0/2.0
 
 #fr = frecuencia relativa
 #vp = valor promedio
@@ -23,17 +23,12 @@ def girar_ruleta(cantidad_giros):
     return resultados
 
 
-def get_fr_esperada(cantidad_giros):
-    fr_esperada = 0.0
-    fr_esperada = float(cantidad_giros)/float(numeros_ruleta)
-    return fr_esperada
+def get_fr_esperada():
+    return valor_estadistico_ruleta
 
 
 def get_vp_esperado(cantidad_giros):
-    sumatoria_giros = 0.0
-    for i in range(0, cantidad_giros):
-        sumatoria_giros+=i
-    return float(sumatoria_giros)/float(cantidad_giros)
+    return float(valor_promedio_esperado)
 
 
 def get_vd_esperado(cantidad_giros):
@@ -141,7 +136,7 @@ def jugar_ruleta(cantidad_giros, resultado_deseado):
     vv_obtenidos = []
     for i in range(1, cantidad_giros+1):
         resultados.append(girar_ruleta(i))
-        fr_esperadas.append(get_fr_esperada(i))
+        fr_esperadas.append(get_fr_esperada())
         vp_esperados.append(get_vp_esperado(i))
         vd_esperados.append(get_vd_esperado(i))
         vv_esperados.append(get_vv_esperado(i))
