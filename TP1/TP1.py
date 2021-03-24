@@ -57,7 +57,7 @@ def get_vp_obtenido(resultados):
     sumatoria_valores_obtenidos = 0
     for i in resultados:
         sumatoria_valores_obtenidos+=i
-    return float(sumatoria_valores_obtenidos/len(resultados))
+    return float(float(sumatoria_valores_obtenidos)/float(len(resultados)))
 
 
 def get_vd_obtenido(resultados):
@@ -71,11 +71,20 @@ def get_vv_obtenido(resultados):
 
 
 def get_grafico_resultados(tiradas, resultados_deseados, resultados):
-    df = pd.DataFrame(columns=tiradas, data=[resultados_deseados, resultados])
-    df = df.set_index([["Resultados deseados", "Resultados obtenidos"]])
-    df.T.plot()
+    lista = []
+    for i in range(0, len(resultados)):
+        element = []
+        element.append(resultados[i])
+        element.append(resultados_deseados[i])
+        element.append(tiradas[i])
+        lista.append(element)
+    df = pd.DataFrame(columns=['resultados', 'resultados deseados', 'tiradas'], index=tiradas, data=lista)
+    ax1 = df.plot(kind='scatter', x='tiradas', y='resultados deseados', color='r', label="Resultado deseado")    
+    ax2 = df.plot(kind='scatter', x='tiradas', y='resultados', color='g', ax=ax1, label="Resultado obtenido") 
+    print(df)
     plt.xlabel("Tiradas")
     plt.ylabel("Valores")
+
     plt.title("Grafico resultados deseados vs obtenidos")
     plt.savefig("grafico-resultados.png")
 
@@ -125,7 +134,9 @@ def get_grafico_vv(tiradas, vv_esperados, vv_obtenidos):
 
 
 def jugar_ruleta(cantidad_giros, resultado_deseado):
-    resultados = []
+    resultados = girar_ruleta(cantidad_giros)
+    print(resultados)
+    lista_de_lista_de_resultados = []
     fr_esperadas = []
     vp_esperados = []
     vd_esperados = []
@@ -135,22 +146,25 @@ def jugar_ruleta(cantidad_giros, resultado_deseado):
     vd_obtenidos = []
     vv_obtenidos = []
     for i in range(1, cantidad_giros+1):
-        resultados.append(girar_ruleta(i))
+        temporal_lista  = []
+        for x in range(0, i):
+            temporal_lista.append(resultados[x])
+        lista_de_lista_de_resultados.append(temporal_lista)
         fr_esperadas.append(get_fr_esperada())
         vp_esperados.append(get_vp_esperado(i))
         vd_esperados.append(get_vd_esperado(i))
         vv_esperados.append(get_vv_esperado(i))
-        fr_obtenidas.append(get_fr_obtenida(resultados[i-1], resultado_deseado))
-        vp_obtenidos.append(get_vp_obtenido(resultados[i-1]))
-        vd_obtenidos.append(get_vd_obtenido(resultados[i-1]))
-        vv_obtenidos.append(get_vv_obtenido(resultados[i-1]))
+        fr_obtenidas.append(get_fr_obtenida(lista_de_lista_de_resultados[i-1], resultado_deseado))
+        vp_obtenidos.append(get_vp_obtenido(lista_de_lista_de_resultados[i-1]))
+        vd_obtenidos.append(get_vd_obtenido(lista_de_lista_de_resultados[i-1]))
+        vv_obtenidos.append(get_vv_obtenido(lista_de_lista_de_resultados[i-1]))
     tiradas = []
     resultados_deseados = []
     for i in range(1, cantidad_giros+1):
         tiradas.append(i)
         resultados_deseados.append(resultado_deseado)
 
-    get_grafico_resultados(tiradas, resultados_deseados, resultados[len(resultados)-1])
+    get_grafico_resultados(tiradas, resultados_deseados, resultados)
     get_grafico_fr(tiradas, fr_esperadas, fr_obtenidas)
     get_grafico_vp(tiradas, vp_esperados, vp_obtenidos)
     get_grafico_vd(tiradas, vd_esperados, vd_obtenidos)
