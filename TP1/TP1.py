@@ -86,7 +86,7 @@ def get_grafico_resultados(tiradas, resultados_deseados, resultados):
     plt.ylabel("Valores")
 
     plt.title("Grafico resultados deseados vs obtenidos")
-    plt.savefig("grafico-resultados.png")
+    plt.savefig("grafico-resultados.svg")
 
 
 def get_grafico_fr(tiradas, fr_esperadas, fr_obtenidas):
@@ -97,7 +97,7 @@ def get_grafico_fr(tiradas, fr_esperadas, fr_obtenidas):
     plt.xlabel("Tiradas")
     plt.ylabel("Valores")
     plt.title("Grafico frecuencias relativas esperadas vs obtenidas")
-    plt.savefig("grafico-fr-relativas.png")
+    plt.savefig("grafico-fr-relativas.svg")
 
 
 def get_grafico_vp(tiradas, vp_esperados, vp_obtenidos):
@@ -108,7 +108,7 @@ def get_grafico_vp(tiradas, vp_esperados, vp_obtenidos):
     plt.xlabel("Tiradas")
     plt.ylabel("Valores")
     plt.title("Grafico valores promedio esperados vs valores promedio obtenidos")
-    plt.savefig("grafico-vp.png")
+    plt.savefig("grafico-vp.svg")
 
 
 def get_grafico_vd(tiradas, vd_esperados, vd_obtenidos):
@@ -119,7 +119,7 @@ def get_grafico_vd(tiradas, vd_esperados, vd_obtenidos):
     plt.xlabel("Tiradas")
     plt.ylabel("Valores")
     plt.title("Grafico valores desvio estandar esperados vs obtenidos")
-    plt.savefig("grafico-vd.png")
+    plt.savefig("grafico-vd.svg")
 
 
 def get_grafico_vv(tiradas, vv_esperados, vv_obtenidos):
@@ -130,7 +130,7 @@ def get_grafico_vv(tiradas, vv_esperados, vv_obtenidos):
     plt.xlabel("Tiradas")
     plt.ylabel("Valores")
     plt.title("Grafico valores varianza esperados vs valores varianza obtenidos")
-    plt.savefig("grafico-vv.png")
+    plt.savefig("grafico-vv.svg")
 
 
 def jugar_ruleta(cantidad_giros, resultado_deseado):
