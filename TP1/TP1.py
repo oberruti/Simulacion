@@ -86,89 +86,159 @@ def get_grafico_resultados(tiradas, resultados_deseados, resultados):
     plt.ylabel("Valores")
 
     plt.title("Grafico resultados deseados vs obtenidos")
-    plt.savefig("grafico-resultados.svg")
+    plt.savefig("grafico-resultados-"+str(len(tiradas))+".svg")
 
 
-def get_grafico_fr(tiradas, fr_esperadas, fr_obtenidas):
-    df = pd.DataFrame(columns=tiradas, data=[fr_esperadas, fr_obtenidas])
-    df = df.set_index([["Frecuencia relativa esperada", "Frecuencia relativa obtenida"]])
+def get_grafico_fr(tiradas, lista_de_fr):
+    df = pd.DataFrame(columns=tiradas, data=lista_de_fr)
+    
     print(df)
+
+    names = []
+    cantidad_de_lineas = len(lista_de_fr)
+    for i in range(0, cantidad_de_lineas):
+        if i == cantidad_de_lineas-1:
+            names.append('Frecuencia relativa esperada')
+        else:
+            names.append('Frecuencia relativa ' + str(i+1) + ' obtenida')
+
+    df = df.set_index([names])
+
     df.T.plot()
     plt.xlabel("Tiradas")
-    plt.ylabel("Valores")
+    plt.ylabel("Frecuencias relativas")
     plt.title("Grafico frecuencias relativas esperadas vs obtenidas")
-    plt.savefig("grafico-fr-relativas.svg")
+    plt.savefig("grafico-fr-relativas-"+str(len(tiradas))+".svg")
 
 
-def get_grafico_vp(tiradas, vp_esperados, vp_obtenidos):
-    df = pd.DataFrame(columns=tiradas, data=[vp_esperados, vp_obtenidos])
-    df = df.set_index([["Valor promedio esperado", "Valor promedio obtenido"]])
-    print(df)
+def get_grafico_vp(tiradas, lista_de_vp):
+    df = pd.DataFrame(columns=tiradas, data=lista_de_vp)
+    
+    print(df) 
+    names = []
+    cantidad_de_lineas = len(lista_de_vp)
+    for i in range(0, cantidad_de_lineas):
+        if i == cantidad_de_lineas-1:
+            names.append('Valor promedio esperado')
+        else:
+            names.append('Valor promedio ' + str(i+1) + ' obtenido')
+    df = df.set_index([names])
+
     df.T.plot()
     plt.xlabel("Tiradas")
-    plt.ylabel("Valores")
+    plt.ylabel("Valores promedio")
     plt.title("Grafico valores promedio esperados vs valores promedio obtenidos")
-    plt.savefig("grafico-vp.svg")
+    plt.savefig("grafico-vp-"+str(len(tiradas))+".svg")
 
 
-def get_grafico_vd(tiradas, vd_esperados, vd_obtenidos):
-    df = pd.DataFrame(columns=tiradas, data=[vd_esperados, vd_obtenidos])
-    df = df.set_index([["Valor desvio esperado", "Valor desvio obtenido"]])
-    print(df)
+def get_grafico_vd(tiradas, lista_de_vd):
+    df = pd.DataFrame(columns=tiradas, data=lista_de_vd)
+    
+    print(df) 
+    names = []
+    cantidad_de_lineas = len(lista_de_vd)
+    for i in range(0, cantidad_de_lineas):
+        if i == cantidad_de_lineas-1:
+            names.append('Valor desvio esperado')
+        else:
+            names.append('Valor desvio ' + str(i+1) + ' obtenido')
+    df = df.set_index([names])
+
     df.T.plot()
     plt.xlabel("Tiradas")
-    plt.ylabel("Valores")
+    plt.ylabel("Valor del desvio estandar")
     plt.title("Grafico valores desvio estandar esperados vs obtenidos")
-    plt.savefig("grafico-vd.svg")
+    plt.savefig("grafico-vd-"+str(len(tiradas))+".svg")
 
 
-def get_grafico_vv(tiradas, vv_esperados, vv_obtenidos):
-    df = pd.DataFrame(columns=tiradas, data=[vv_esperados, vv_obtenidos])
-    df = df.set_index([["Valor varianza esperado", "Valor varianza obtenido"]])
-    print(df)
+def get_grafico_vv(tiradas, lista_de_vv):
+    df = pd.DataFrame(columns=tiradas, data=lista_de_vv)
+    
+    print(df) 
+    names = []
+    cantidad_de_lineas = len(lista_de_vv)
+    for i in range(0, cantidad_de_lineas):
+        if i == cantidad_de_lineas-1:
+            names.append('Valor varianza esperado')
+        else:
+            names.append('Valor varianza ' + str(i+1) + ' obtenido')
+    df = df.set_index([names])
+
     df.T.plot()
     plt.xlabel("Tiradas")
-    plt.ylabel("Valores")
+    plt.ylabel("Valor de la varianza")
     plt.title("Grafico valores varianza esperados vs valores varianza obtenidos")
-    plt.savefig("grafico-vv.svg")
+    plt.savefig("grafico-vv-"+str(len(tiradas))+".svg")
 
 
-def jugar_ruleta(cantidad_giros, resultado_deseado):
-    resultados = girar_ruleta(cantidad_giros)
-    print(resultados)
+def jugar_ruleta(cantidad_giros, resultado_deseado, cantidad_de_corridas_para_comparar):
+    lista_de_resultados = []
+    lista_de_fr = []
+    lista_de_vp = []
+    lista_de_vd = []
+    lista_de_vv = []
+
+
+    #corridas para obtener valores
+    for i in range(1, cantidad_de_corridas_para_comparar+1):
+        resultados = girar_ruleta(cantidad_giros)
+        lista_de_resultados.append(resultados)
+    
+        lista_de_lista_de_resultados = []
+        fr_obtenidas = []
+        vp_obtenidos = []
+        vd_obtenidos = []
+        vv_obtenidos = []
+        for i in range(1, cantidad_giros+1):
+            temporal_lista  = []
+
+            #analiza resultados incrementalmente
+            for x in range(0, i):
+                temporal_lista.append(resultados[x])
+            lista_de_lista_de_resultados.append(temporal_lista)
+            fr_obtenidas.append(get_fr_obtenida(lista_de_lista_de_resultados[i-1], resultado_deseado))
+            vp_obtenidos.append(get_vp_obtenido(lista_de_lista_de_resultados[i-1]))
+            vd_obtenidos.append(get_vd_obtenido(lista_de_lista_de_resultados[i-1]))
+            vv_obtenidos.append(get_vv_obtenido(lista_de_lista_de_resultados[i-1]))
+        lista_de_fr.append(fr_obtenidas)
+        lista_de_vp.append(vp_obtenidos)
+        lista_de_vd.append(vd_obtenidos)
+        lista_de_vv.append(vv_obtenidos)
+        
+
+    #valores esperados
     lista_de_lista_de_resultados = []
     fr_esperadas = []
     vp_esperados = []
     vd_esperados = []
     vv_esperados = []
-    fr_obtenidas = []
-    vp_obtenidos = []
-    vd_obtenidos = []
-    vv_obtenidos = []
     for i in range(1, cantidad_giros+1):
-        temporal_lista  = []
-        for x in range(0, i):
-            temporal_lista.append(resultados[x])
-        lista_de_lista_de_resultados.append(temporal_lista)
         fr_esperadas.append(get_fr_esperada())
         vp_esperados.append(get_vp_esperado(i))
         vd_esperados.append(get_vd_esperado(i))
         vv_esperados.append(get_vv_esperado(i))
-        fr_obtenidas.append(get_fr_obtenida(lista_de_lista_de_resultados[i-1], resultado_deseado))
-        vp_obtenidos.append(get_vp_obtenido(lista_de_lista_de_resultados[i-1]))
-        vd_obtenidos.append(get_vd_obtenido(lista_de_lista_de_resultados[i-1]))
-        vv_obtenidos.append(get_vv_obtenido(lista_de_lista_de_resultados[i-1]))
+    lista_de_fr.append(fr_esperadas)
+    lista_de_vp.append(vp_esperados)
+    lista_de_vd.append(vd_esperados)
+    lista_de_vv.append(vv_esperados)
+
+
+
+    #para grafica de resultados    
     tiradas = []
     resultados_deseados = []
     for i in range(1, cantidad_giros+1):
         tiradas.append(i)
         resultados_deseados.append(resultado_deseado)
 
+    lista_de_resultados.append(resultados_deseados)
+
+    #armado de graficos
     get_grafico_resultados(tiradas, resultados_deseados, resultados)
-    get_grafico_fr(tiradas, fr_esperadas, fr_obtenidas)
-    get_grafico_vp(tiradas, vp_esperados, vp_obtenidos)
-    get_grafico_vd(tiradas, vd_esperados, vd_obtenidos)
-    get_grafico_vv(tiradas, vv_esperados, vv_obtenidos)
+    get_grafico_fr(tiradas, lista_de_fr)
+    get_grafico_vp(tiradas, lista_de_vp)
+    get_grafico_vd(tiradas, lista_de_vd)
+    get_grafico_vv(tiradas, lista_de_vv)
 
 
 def main():
@@ -178,7 +248,9 @@ def main():
         resultado_deseado = int(input("Ingrese el resultado deseado para la ruleta (entre 0 y 36): "))
         if resultado_deseado > 0 or resultado_deseado < 36:
             resultado_deseado_verificado = resultado_deseado
-    jugar_ruleta(cantidad_giros, resultado_deseado_verificado)
+
+    cantidad_de_corridas_para_comparar = int(input("Ingrese la cantidad de corridas para la ruleta: "))
+    jugar_ruleta(cantidad_giros, resultado_deseado_verificado, cantidad_de_corridas_para_comparar)
 
 
 if __name__ == "__main__":
