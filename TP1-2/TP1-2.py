@@ -117,13 +117,14 @@ def apuesta_simple(fondos, apuesta_actual, resultados_deseados, multiplicador):
         conteo_giros += + 1;
     print(resultados)
 
-def martin_gala(fondos, apuesta_actual, resultados_deseados, multiplicador):
+def martin_gala(fondos, apuesta_base, resultados_deseados, multiplicador):
     print('Resultado/s deseado/s: ',resultados_deseados)
     print('Martingala: ')
     resultados = []
-    capital_inicial = fondos
-    apuesta_base = apuesta_actual
+    apuesta_actual = apuesta_base
     conteo_giros = 0
+    print('Fondos iniciales: ', fondos)
+    print('Apuesta inicial: ', apuesta_actual)
     while fondos > 0 and conteo_giros < max_tiradas:
         fondos = fondos - apuesta_actual
         resultado_obtenido = girar_ruleta()
@@ -131,16 +132,16 @@ def martin_gala(fondos, apuesta_actual, resultados_deseados, multiplicador):
         if (resultado_obtenido in resultados_deseados):
             premio = apuesta_actual*multiplicador
             fondos = fondos + premio
-            print('Ganaste, volves a la apuesta inicial! Capital actual: $', fondos)
+            print('Ganaste: $',premio,' , volves a la apuesta inicial! Capital actual: $', fondos)
             apuesta_actual = apuesta_base
-        elif (resultado_obtenido not in resultados_deseados):
-            if (fondos <= apuesta_base * 2):
+        else:
+            apuesta_actual = apuesta_actual * 2
+            print('Perdiste, duplicas! Capital actual: $', fondos)
+            print('Proxima apuesta: $', apuesta_actual)
+            if (fondos <= apuesta_actual):
                 print('No quedan fondos suficientes para seguir haciendo MartinGala')
                 resultados.append(resultado_obtenido)
                 break
-            else:
-                apuesta_actual = apuesta_actual * 2
-                print('Perdiste, duplicas! Capital actual: $', fondos)
         resultados.append(resultado_obtenido)
         conteo_giros += 1;
     print(resultados)
