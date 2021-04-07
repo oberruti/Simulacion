@@ -7,7 +7,7 @@ min_ruleta = 0
 max_ruleta = 36
 numeros_ruleta = 37.0
 verde = 0
-max_tiradas = 10
+max_tiradas = 1500
 estrategia_multiplicador = {
     'rojos': 2, 
     'pares': 2,
@@ -205,23 +205,6 @@ def fibonacci(fondos, apuesta_base, resultados_deseados, multiplicador):
     print('Resultados fibonacci', resultados_fibo)
     print(' ')
 
-def get_estrategia():
-    estrategia_verificada = -1
-    while(estrategia_verificada<0 or estrategia_verificada>5):
-        estrategia_seleccionada = int(input(
-        '''
-        ¿Que estrategia desea utilizar?:
-        1) Rojo/Negro [Premio: 1x1]
-        2) Par/Impar [Premio: 1x1] 
-        3) Docena [Premio: 2x1]
-        4) Columna [Premio: 2x1]
-        5) Pleno [Premio: 35x1]
-        '''
-        ))
-        if estrategia_seleccionada > 0 and estrategia_seleccionada < 6:
-            estrategia_verificada = estrategia_seleccionada
-    return estrategia_seleccionada
-
 
 def start_ruleta(ruleta):
     # ingreso fondos y valido, si es 0 el capital tiene que ser infinito
@@ -235,38 +218,98 @@ def start_ruleta(ruleta):
     apuesta_actual = get_apuesta_deseada(fondos)
     
     # ingreso estrategia de apuesta
-    estrategia_seleccionada = get_estrategia()
+
+    resultados_deseados_rojos = []
+    resultados_rojos_as = []
+    resultados_rojos_mg = []
+    resultados_rojos_fi = []
+
+    resultados_deseados_pares = []
+    resultados_pares_as = []
+    resultados_pares_mg = []
+    resultados_pares_fi = []
+
+    resultados_deseados_docenas = []
+    resultados_docenas_as = []
+    resultados_docenas_mg = []
+    resultados_docenas_fi = []
+
+    resultados_deseados_columnas = []
+    resultados_columnas_as = []
+    resultados_columnas_mg = []
+    resultados_columnas_fi = []
+
+    resultados_deseados_plenos = []
+    resultados_plenos_as = []
+    resultados_plenos_mg = []
+    resultados_plenos_fi = []
 
     print('Usted apostará $',apuesta_actual)
-    if estrategia_seleccionada == 1:
-        resultados_deseados = ruleta.get('rojos')
-        apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
-        martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
-        fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
-    
-    elif estrategia_seleccionada == 2:
-        resultados_deseados = ruleta.get('pares')
-        apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pares'))
-        martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pares'))
-        fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pares'))
-    
-    elif estrategia_seleccionada == 3:
-        resultados_deseados = ruleta.get('docenas')[0]
-        apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('docenas'))
-        martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('docenas'))
-        fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('docenas'))
 
-    elif estrategia_seleccionada == 4:
-        resultados_deseados = ruleta.get('columnas')[0]
-        apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('columnas'))
-        martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('columnas'))
-        fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('columnas'))
-    
-    elif estrategia_seleccionada == 5:
-        resultado_deseado = get_lista_resultados_deseados()
-        apuesta_simple(fondos, apuesta_actual, resultado_deseado, estrategia_multiplicador.get('pleno'))
-        martin_gala(fondos, apuesta_actual, resultado_deseado, estrategia_multiplicador.get('pleno'))
-        fibonacci(fondos, apuesta_actual, resultado_deseado, estrategia_multiplicador.get('pleno'))
+    for i in range(0, 1):
+        #se juega los rojos
+        resultados_deseados = ruleta.get('rojos')
+        ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
+        mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
+        fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
+
+        #se guarda los rojos
+        resultados_deseados_rojos.append(resultados_deseados)
+        resultados_rojos_as.append(ap)
+        resultados_rojos_mg.append(mg)
+        resultados_rojos_fi.append(fi)
+
+
+        #se juega los pares
+        resultados_deseados = ruleta.get('pares')
+        ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pares'))
+        mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pares'))
+        fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pares'))
+
+        #se guarda los pares
+        resultados_deseados_pares.append(resultados_deseados)
+        resultados_pares_as.append(ap)
+        resultados_pares_mg.append(mg)
+        resultados_pares_fi.append(fi)
+
+
+        #se juega las docenas
+        resultados_deseados = ruleta.get('docenas')[0]
+        ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('docenas'))
+        mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('docenas'))
+        fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('docenas'))
+
+        #se guarda las docenas
+        resultados_deseados_docenas.append(resultados_deseados)
+        resultados_docenas_as.append(ap)
+        resultados_docenas_mg.append(mg)
+        resultados_docenas_fi.append(fi)
+
+        #se juega las columnas
+        resultados_deseados = ruleta.get('columnas')
+        ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('columnas'))
+        mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('columnas'))
+        fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('columnas'))
+
+        #se guarda las columnas
+        resultados_deseados_columnas.append(resultados_deseados)
+        resultados_columnas_as.append(ap)
+        resultados_columnas_mg.append(mg)
+        resultados_columnas_fi.append(fi)
+
+
+        #se juega los plenos
+        resultados_deseados = get_lista_resultados_deseados()
+        ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pleno'))
+        mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pleno'))
+        fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pleno'))
+
+        #se guarda los plenos
+        resultados_deseados_plenos.append(resultados_deseados)
+        resultados_plenos_as.append(ap)
+        resultados_plenos_mg.append(mg)
+        resultados_plenos_fi.append(fi)
+
 
 def main():
     # creo la ruleta y la inicializo
