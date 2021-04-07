@@ -313,30 +313,6 @@ def start_ruleta(ruleta):
         resultados_plenos_mg.append(mg)
         resultados_plenos_fi.append(fi)
 
-    print(resultados_deseados_rojos )
-    print(resultados_rojos_as )
-    print(resultados_rojos_mg )
-    print(resultados_rojos_fi )
-
-    print(resultados_deseados_pares )
-    print(resultados_pares_as )
-    print(resultados_pares_mg )
-    print(resultados_pares_fi )
-
-    print(resultados_deseados_docenas )
-    print(resultados_docenas_as )
-    print(resultados_docenas_mg )
-    print(resultados_docenas_fi )
-
-    print(resultados_deseados_columnas )
-    print(resultados_columnas_as )
-    print(resultados_columnas_mg )
-    print(resultados_columnas_fi )
-
-    print(resultados_deseados_plenos )
-    print(resultados_plenos_as )
-    print(resultados_plenos_mg )
-    print(resultados_plenos_fi )
 
 def main():
     # creo la ruleta y la inicializo
