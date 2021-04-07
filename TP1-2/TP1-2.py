@@ -1,13 +1,13 @@
 from random import randint
-#import numpy as np
-#import pandas as pd
+import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 min_ruleta = 0
 max_ruleta = 36
 numeros_ruleta = 37.0
 verde = 0
-max_tiradas = 10
+max_tiradas = 100
 estrategia_multiplicador = {
     'rojos': 2, 
     'pares': 2,
@@ -98,22 +98,25 @@ def get_lista_resultados_deseados():
     return resultados_deseados
 
 
-def apuesta_simple(fondos, apuesta_actual, resultados_deseados, multiplicador):
+def apuesta_simple(capital_inicial, apuesta_actual, resultados_deseados, multiplicador):
     #print('Resultado/s deseado/s: ',resultados_deseados)
     #print('Apuesta simple: ')
     resultados = []
-    capital_inicial = fondos
+    fondos = capital_inicial
     conteo_giros = 0
-    while fondos > 0 and conteo_giros < max_tiradas:
-        fondos -= apuesta_actual
-        resultado_obtenido = girar_ruleta()
-        #print('Resultado: ', resultado_obtenido)
-        if (resultado_obtenido in resultados_deseados):
-            fondos+= apuesta_actual*multiplicador
-            #print('Ganaste! Capital actual: ', fondos)
-        #elif (resultado_obtenido not in resultados_deseados):
-            #print('Perdiste! Capital actual: ', fondos)
-        resultados.append(resultado_obtenido)
+    while conteo_giros < max_tiradas:
+        if fondos < apuesta_actual:
+            resultados.append({'valor': None, 'caja': fondos})
+        else:
+            fondos -= apuesta_actual
+            resultado_obtenido = girar_ruleta()
+            #print('Resultado: ', resultado_obtenido)
+            if (resultado_obtenido in resultados_deseados):
+                fondos+= apuesta_actual*multiplicador
+                #print('Ganaste! Capital actual: ', fondos)
+            #elif (resultado_obtenido not in resultados_deseados):
+                #print('Perdiste! Capital actual: ', fondos)
+            resultados.append({'valor': resultado_obtenido, 'caja': fondos})
         conteo_giros += + 1;
     #print(resultados)
     return resultados
@@ -126,24 +129,27 @@ def martin_gala(fondos, apuesta_base, resultados_deseados, multiplicador):
     conteo_giros = 0
     #print('Fondos iniciales: ', fondos)
     #print('Apuesta inicial: ', apuesta_actual)
-    while fondos > 0 and conteo_giros < max_tiradas:
-        fondos = fondos - apuesta_actual
-        resultado_obtenido = girar_ruleta()
-        #print('Resultado: ', resultado_obtenido)
-        if (resultado_obtenido in resultados_deseados):
-            premio = apuesta_actual*multiplicador
-            fondos = fondos + premio
-            #print('Ganaste: $',premio,' , volves a la apuesta inicial! Capital actual: $', fondos)
-            apuesta_actual = apuesta_base
+    while conteo_giros < max_tiradas:
+        if fondos < apuesta_actual:
+            resultados.append({'valor': None, 'caja': fondos})
         else:
-            apuesta_actual = apuesta_actual * 2
-            #print('Perdiste, duplicas! Capital actual: $', fondos)
-            #print('Proxima apuesta: $', apuesta_actual)
-            if (fondos <= apuesta_actual):
-                #print('No quedan fondos suficientes para seguir haciendo MartinGala')
-                resultados.append(resultado_obtenido)
-                break
-        resultados.append(resultado_obtenido)
+            fondos = fondos - apuesta_actual
+            resultado_obtenido = girar_ruleta()
+            #print('Resultado: ', resultado_obtenido)
+            if (resultado_obtenido in resultados_deseados):
+                premio = apuesta_actual*multiplicador
+                fondos = fondos + premio
+                #print('Ganaste: $',premio,' , volves a la apuesta inicial! Capital actual: $', fondos)
+                apuesta_actual = apuesta_base
+            else:
+                apuesta_actual = apuesta_actual * 2
+                #print('Perdiste, duplicas! Capital actual: $', fondos)
+                #print('Proxima apuesta: $', apuesta_actual)
+                if (fondos <= apuesta_actual):
+                    #print('No quedan fondos suficientes para seguir haciendo MartinGala')
+                    resultados.append({'valor': resultado_obtenido, 'caja': fondos})
+                    break
+            resultados.append({'valor': resultado_obtenido, 'caja': fondos})
         conteo_giros += 1;
     #print(resultados)
     return resultados
@@ -172,36 +178,39 @@ def fibonacci(fondos, apuesta_base, resultados_deseados, multiplicador):
     valor_fib_actual = 1
     conteo_giros = 0
     
-    while fondos > apuesta_actual and conteo_giros < max_tiradas:
-        #print('Fondo antes de la apuesta: $', fondos)
-        fondos = fondos - apuesta_actual
-        resultado_obtenido = girar_ruleta()
-        #print('Resultado de la tirada: ', resultado_obtenido)
-        #print('Apuesta actual: ', apuesta_actual)
-        #print('Fibonacci index actual: ', fib_index_actual)
-        #print('Valor Fibonacci actual: ', valor_fib_actual)
-        #print('Fondo despues de la apuesta: $', fondos)
-        if (resultado_obtenido in resultados_deseados):
-            premio = apuesta_actual*multiplicador
-            fondos = fondos + premio
-            #print('Ganaste: $', premio)
-            #print('Volves a la apuesta anterior! Capital actual: $', fondos)
-            if fib_index_actual < 2:
-                fib_index_actual = 1
-            else:
-                fib_index_actual = fib_index_actual - 1
-            valor_fib_actual = calcular_fib(fib_index_actual)
-            apuesta_actual = apuesta_base * valor_fib_actual
+    while conteo_giros < max_tiradas:
+        if fondos < apuesta_actual:
+            resultados_fibo.append({'valor': None, 'caja': fondos})
         else:
-            fib_index_actual = fib_index_actual + 1
-            valor_fib_actual = calcular_fib(fib_index_actual)
-            apuesta_actual = apuesta_base * valor_fib_actual
-            #print('Perdiste! Capital actual: $', fondos)
-            if (fondos < apuesta_base):
-                #print('No quedan fondos suficientes para seguir haciendo Fibonacci')
-                resultados_fibo.append(resultado_obtenido)
-                break
-        resultados_fibo.append(resultado_obtenido)
+            #print('Fondo antes de la apuesta: $', fondos)
+            fondos = fondos - apuesta_actual
+            resultado_obtenido = girar_ruleta()
+            #print('Resultado de la tirada: ', resultado_obtenido)
+            #print('Apuesta actual: ', apuesta_actual)
+            #print('Fibonacci index actual: ', fib_index_actual)
+            #print('Valor Fibonacci actual: ', valor_fib_actual)
+            #print('Fondo despues de la apuesta: $', fondos)
+            if (resultado_obtenido in resultados_deseados):
+                premio = apuesta_actual*multiplicador
+                fondos = fondos + premio
+                #print('Ganaste: $', premio)
+                #print('Volves a la apuesta anterior! Capital actual: $', fondos)
+                if fib_index_actual < 2:
+                    fib_index_actual = 1
+                else:
+                    fib_index_actual = fib_index_actual - 1
+                valor_fib_actual = calcular_fib(fib_index_actual)
+                apuesta_actual = apuesta_base * valor_fib_actual
+            else:
+                fib_index_actual = fib_index_actual + 1
+                valor_fib_actual = calcular_fib(fib_index_actual)
+                apuesta_actual = apuesta_base * valor_fib_actual
+                #print('Perdiste! Capital actual: $', fondos)
+                if (fondos < apuesta_base):
+                    #print('No quedan fondos suficientes para seguir haciendo Fibonacci')
+                    resultados_fibo.append({'valor': resultado_obtenido, 'caja': fondos})
+                    break
+            resultados_fibo.append({'valor': resultado_obtenido, 'caja': fondos})
         conteo_giros += 1
         #print(' ')
     #print('Resultados fibonacci', resultados_fibo)
@@ -249,7 +258,7 @@ def start_ruleta(ruleta):
 
     #print('Usted apostará $',apuesta_actual)
 
-    for i in range(0, 10):
+    for i in range(0, 1):
         #se juega los rojos
         resultados_deseados = ruleta.get('rojos')
         ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
@@ -313,12 +322,71 @@ def start_ruleta(ruleta):
         resultados_plenos_mg.append(mg)
         resultados_plenos_fi.append(fi)
 
+    retorno = {
+    'resultados_deseados_rojos': resultados_deseados_rojos,
+    'resultados_rojos_as': resultados_rojos_as,
+    'resultados_rojos_mg': resultados_rojos_mg,
+    'resultados_rojos_fi': resultados_rojos_fi,
+    'resultados_deseados_pares': resultados_deseados_pares,
+    'resultados_pares_as': resultados_pares_as,
+    'resultados_pares_mg': resultados_pares_mg,
+    'resultados_pares_fi': resultados_pares_fi,
+    'resultados_deseados_docenas': resultados_deseados_docenas,
+    'resultados_docenas_as': resultados_docenas_as,
+    'resultados_docenas_mg': resultados_docenas_mg,
+    'resultados_docenas_fi': resultados_docenas_fi,
+    'resultados_deseados_columnas': resultados_deseados_columnas,
+    'resultados_columnas_as': resultados_columnas_as,
+    'resultados_columnas_mg': resultados_columnas_mg,
+    'resultados_columnas_fi': resultados_columnas_fi,
+    'resultados_deseados_plenos': resultados_deseados_plenos,
+    'resultados_plenos_as': resultados_plenos_as,
+    'resultados_plenos_mg': resultados_plenos_mg,
+    'resultados_plenos_fi': resultados_plenos_fi
+    }
+
+
+    return retorno
+
+
+
+# def get_grafico_resultados(resultados):
+#     valores_resultados = []
+#     index = []
+#     for x in range(0, len(resultados[0])):
+#         resultado = resultados[0][x].get('valor')
+#         valores_resultados.append(resultado)
+#         index.append(x)
+
+#     lista = []
+#     for i in range(0, len(valores_resultados)):
+#         element = []
+#         element.append(valores_resultados[i])
+#         element.append(i)
+#         lista.append(element)
+#     df = pd.DataFrame(columns=['resultados', 'tirada'], index=index, data=lista)
+#     ax1 = df.plot(kind='scatter', x='tirada', y='resultados', color='r', label="Resultados")    
+#     print(df)
+#     plt.xlabel("Tirada")
+#     plt.ylabel("Valores")
+
+#     plt.title("Grafico resultados obtenidos")
+#     plt.savefig("grafico-resultados-obtenidos.svg")
+
 
 def main():
     # creo la ruleta y la inicializo
     ruleta = ini_ruleta()
     # inicio el juego
-    start_ruleta(ruleta)
+    valores_obtenidos = start_ruleta(ruleta)
+
+    resultados_deseados_rojos = valores_obtenidos.get('resultados_deseados_rojos')
+    resultados_rojos_as = valores_obtenidos.get('resultados_rojos_as')
+    resultados_rojos_mg = valores_obtenidos.get('resultados_rojos_mg')
+    resultados_rojos_fi = valores_obtenidos.get('resultados_rojos_fi')
+
+    get_grafico_resultados(1, resultados_deseados_rojos, resultados_rojos_as)
+    
 
 if __name__ == "__main__":
     main()
