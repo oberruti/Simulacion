@@ -133,35 +133,44 @@ def fib(n):
         return fib(n-1) + fib(n-2)
 
 def fibonacci(fondos, apuesta_base, resultado_deseado, multiplicador):
-    print('Resultado/s deseado/s: ',resultado_deseado)
+    print('')
     print('Fibonacci: ')
+    print('')
+    print('-----Datos iniciales-----')
+    print('Resultado/s deseado/s: ',resultado_deseado)
     resultados_fibo = []
-    secuencia_fibo = []
     apuesta_actual = apuesta_base
     print('Apuesta inicial: ', apuesta_actual)
-    fib_actual = 1
-    n = 0
+    print('')
+    print('-----Datos corridas-----')
+    fib_index_actual = 1
+    valor_fib_actual = 1
     cont_giros = 0
-    for i in range(1, max_tiradas):
-        secuencia_fibo.append(fib(i))
-    while fondos > apuesta_base and cont_giros < max_tiradas-1:
+    
+    while fondos > apuesta_base and cont_giros < max_tiradas:
         print('Fondo antes de la apuesta: $', fondos)
         fondos = fondos - apuesta_actual
         resultado_obtenido = girar_ruleta()
         print('Resultado de la tirada: ', resultado_obtenido)
         print('Apuesta actual: ', apuesta_actual)
-        print('Fibonacci actual: ', fib_actual)
+        print('Fibonacci index actual: ', fib_index_actual)
+        print('Valor Fibonacci actual: ', valor_fib_actual)
         print('Fondo despues de la apuesta: $', fondos)
         if (resultado_obtenido in resultado_deseado):
             premio = apuesta_actual*multiplicador
             fondos = fondos + premio
             print('Ganaste: $', premio)
             print('Volves a la apuesta anterior! Capital actual: $', fondos)
-            fib_actual = fib_actual - 1
-            apuesta_actual = apuesta_base * secuencia_fibo[fib_actual-1]
-        elif (resultado_obtenido not in resultado_deseado):
-            fib_actual = fib_actual + 1
-            apuesta_actual = apuesta_base * secuencia_fibo[fib_actual-1]
+            if fib_index_actual < 2:
+                fib_index_actual = 1
+            else:
+                fib_index_actual = fib_index_actual - 1
+            valor_fib_actual = fib(fib_index_actual)
+            apuesta_actual = apuesta_base * valor_fib_actual
+        else:
+            fib_index_actual = fib_index_actual + 1
+            valor_fib_actual = fib(fib_index_actual)
+            apuesta_actual = apuesta_base * valor_fib_actual
             print('Perdiste! Capital actual: $', fondos)
             if (fondos < apuesta_base):
                 print('No quedan fondos suficientes para seguir haciendo Fibonacci')
@@ -169,7 +178,9 @@ def fibonacci(fondos, apuesta_base, resultado_deseado, multiplicador):
                 break
         resultados_fibo.append(resultado_obtenido)
         cont_giros += 1
-    print(resultados_fibo)
+        print(' ')
+    print('Resultados fibonacci', resultados_fibo)
+    print(' ')
 
 
 def start_ruleta():
