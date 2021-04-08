@@ -100,7 +100,6 @@ def get_lista_resultados_deseados():
 
 
 def apuesta_simple(capital_inicial, apuesta_actual, resultados_deseados, multiplicador):
-    print('     Apuesta simple: ')
     resultados = []
     fondos = capital_inicial
     conteo_giros = 0
@@ -114,11 +113,9 @@ def apuesta_simple(capital_inicial, apuesta_actual, resultados_deseados, multipl
                 fondos+= apuesta_actual*multiplicador
             resultados.append({'valor': resultado_obtenido, 'caja': fondos})
         conteo_giros += 1
-        print('             conteo giros: ', conteo_giros)
     return resultados
 
 def martin_gala(fondos, apuesta_base, resultados_deseados, multiplicador):
-    print('     Martin Gala: ')
     resultados = []
     apuesta_actual = apuesta_base
     conteo_giros = 0
@@ -136,7 +133,6 @@ def martin_gala(fondos, apuesta_base, resultados_deseados, multiplicador):
                 apuesta_actual = apuesta_actual * 2
             resultados.append({'valor': resultado_obtenido, 'caja': fondos})
         conteo_giros += 1
-        print('             conteo giros: ', conteo_giros)
     return resultados
 
 
@@ -149,7 +145,6 @@ def calcular_fib(n):
         return calcular_fib(n-1) + calcular_fib(n-2)
 
 def fibonacci(fondos, apuesta_base, resultados_deseados, multiplicador):
-    print('     Fibonacci: ')
     resultados_fibo = []
     apuesta_actual = apuesta_base
     fib_index_actual = 1
@@ -177,7 +172,6 @@ def fibonacci(fondos, apuesta_base, resultados_deseados, multiplicador):
                 apuesta_actual = apuesta_base * valor_fib_actual
             resultados_fibo.append({'valor': resultado_obtenido, 'caja': fondos})
         conteo_giros += 1
-        print('             conteo giros: ', conteo_giros)
     return resultados_fibo
 
 
@@ -222,69 +216,57 @@ def start_ruleta(ruleta):
     resultados_plenos_mg = []
     resultados_plenos_fi = []
 
-    #print('Usted apostará $',apuesta_actual)
 
     for i in range(0, corridas_programa):
 
-        print('')
-        print('#se juega los rojos')
         resultados_deseados = ruleta.get('rojos')
         ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
         mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
         fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('rojos'))
 
-        print('#se guarda los rojos')
         resultados_deseados_rojos.append(resultados_deseados)
         resultados_rojos_as.append(ap)
         resultados_rojos_mg.append(mg)
         resultados_rojos_fi.append(fi)
 
 
-        print('#se juega los pares')
         resultados_deseados = ruleta.get('pares')
         ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pares'))
         mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pares'))
         fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pares'))
 
-        print('#se guarda los pares')
         resultados_deseados_pares.append(resultados_deseados)
         resultados_pares_as.append(ap)
         resultados_pares_mg.append(mg)
         resultados_pares_fi.append(fi)
 
 
-        print('#se juega las docenas')
         resultados_deseados = ruleta.get('docenas')[0]
         ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('docenas'))
         mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('docenas'))
         fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('docenas'))
 
-        print('#se guarda las docenas')
         resultados_deseados_docenas.append(resultados_deseados)
         resultados_docenas_as.append(ap)
         resultados_docenas_mg.append(mg)
         resultados_docenas_fi.append(fi)
 
-        print('#se juega las columnas')
         resultados_deseados = ruleta.get('columnas')[0]
         ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('columnas'))
         mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('columnas'))
         fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('columnas'))
 
-        print('#se guarda las columnas')
         resultados_deseados_columnas.append(resultados_deseados)
         resultados_columnas_as.append(ap)
         resultados_columnas_mg.append(mg)
         resultados_columnas_fi.append(fi)
 
 
-        print('#se juega los plenos')
         resultados_deseados = pleno_deseado
         ap = apuesta_simple(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pleno'))
         mg = martin_gala(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pleno'))
         fi = fibonacci(fondos, apuesta_actual, resultados_deseados, estrategia_multiplicador.get('pleno'))
 
-        print('#se guarda los plenos')
         resultados_deseados_plenos.append(resultados_deseados)
         resultados_plenos_as.append(ap)
         resultados_plenos_mg.append(mg)
@@ -318,31 +300,6 @@ def start_ruleta(ruleta):
     return retorno
 
 
-
-# def get_grafico_resultados(resultados):
-#     valores_resultados = []
-#     index = []
-#     for x in range(0, len(resultados[0])):
-#         resultado = resultados[0][x].get('valor')
-#         valores_resultados.append(resultado)
-#         index.append(x)
-
-#     lista = []
-#     for i in range(0, len(valores_resultados)):
-#         element = []
-#         element.append(valores_resultados[i])
-#         element.append(i)
-#         lista.append(element)
-#     df = pd.DataFrame(columns=['resultados', 'tirada'], index=index, data=lista)
-#     ax1 = df.plot(kind='scatter', x='tirada', y='resultados', color='r', label="Resultados")    
-#     print(df)
-#     plt.xlabel("Tirada")
-#     plt.ylabel("Valores")
-
-#     plt.title("Grafico resultados obtenidos")
-#     plt.savefig("grafico-resultados-obtenidos.svg")
-
-
 def get_fr_obtenida(resultados, resultados_posibles):
     resultados_filtrados = []
     for objeto in resultados:
@@ -354,7 +311,12 @@ def get_fr_obtenida(resultados, resultados_posibles):
     return float(float(veces_obtenido_resultado_deseado)/float(cantidad_tiros))
 
 
-def graficar(valores_obtenidos, fondos):
+def get_valor_fondos(resultado):
+    fondo = resultado.get('caja')
+    return float(fondo)
+
+
+def graficar(valores_obtenidos, fondos_iniciales):
     resultados_deseados_rojos = valores_obtenidos.get('resultados_deseados_rojos')
     resultados_rojos_as = valores_obtenidos.get('resultados_rojos_as')
     resultados_rojos_mg = valores_obtenidos.get('resultados_rojos_mg')
@@ -380,39 +342,42 @@ def graficar(valores_obtenidos, fondos):
     resultados_plenos_mg = valores_obtenidos.get('resultados_plenos_mg')
     resultados_plenos_fi = valores_obtenidos.get('resultados_plenos_fi')
 
-    get_grafico_fr_by_resultados(resultados_rojos_as, resultados_deseados_rojos, "rojos apuesta simple F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_rojos_mg, resultados_deseados_rojos, "rojos martin gala F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_rojos_fi, resultados_deseados_rojos, "rojos fibonacci F.I: $"+str(fondos))
+    get_graficos(resultados_rojos_as, resultados_deseados_rojos, "rojos apuesta simple F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_rojos_mg, resultados_deseados_rojos, "rojos martin gala F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_rojos_fi, resultados_deseados_rojos, "rojos fibonacci F.I: $"+str(fondos_iniciales))
 
-    get_grafico_fr_by_resultados(resultados_pares_as, resultados_deseados_pares, "pares apuesta simple F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_pares_mg, resultados_deseados_pares, "pares martin gala F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_pares_fi, resultados_deseados_pares, "pares fibonacci F.I: $"+str(fondos))
+    get_graficos(resultados_pares_as, resultados_deseados_pares, "pares apuesta simple F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_pares_mg, resultados_deseados_pares, "pares martin gala F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_pares_fi, resultados_deseados_pares, "pares fibonacci F.I: $"+str(fondos_iniciales))
 
-    get_grafico_fr_by_resultados(resultados_docenas_as, resultados_deseados_docenas, "docenas apuesta simple F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_docenas_mg, resultados_deseados_docenas, "docenas martin gala F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_docenas_fi, resultados_deseados_docenas, "docenas fibonacci F.I: $"+str(fondos))
+    get_graficos(resultados_docenas_as, resultados_deseados_docenas, "docenas apuesta simple F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_docenas_mg, resultados_deseados_docenas, "docenas martin gala F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_docenas_fi, resultados_deseados_docenas, "docenas fibonacci F.I: $"+str(fondos_iniciales))
 
-    get_grafico_fr_by_resultados(resultados_columnas_as, resultados_deseados_columnas, "columnas apuesta simple F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_columnas_mg, resultados_deseados_columnas, "columnas martin gala F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_columnas_fi, resultados_deseados_columnas, "columnas fibonacci F.I: $"+str(fondos))
+    get_graficos(resultados_columnas_as, resultados_deseados_columnas, "columnas apuesta simple F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_columnas_mg, resultados_deseados_columnas, "columnas martin gala F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_columnas_fi, resultados_deseados_columnas, "columnas fibonacci F.I: $"+str(fondos_iniciales))
 
-    get_grafico_fr_by_resultados(resultados_plenos_as, resultados_deseados_plenos, "plenos apuesta simple F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_plenos_mg, resultados_deseados_plenos, "plenos martin gala F.I: $"+str(fondos))
-    get_grafico_fr_by_resultados(resultados_plenos_fi, resultados_deseados_plenos, "plenos fibonacci F.I: $"+str(fondos))
+    get_graficos(resultados_plenos_as, resultados_deseados_plenos, "plenos apuesta simple F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_plenos_mg, resultados_deseados_plenos, "plenos martin gala F.I: $"+str(fondos_iniciales))
+    get_graficos(resultados_plenos_fi, resultados_deseados_plenos, "plenos fibonacci F.I: $"+str(fondos_iniciales))
 
 
 
-def get_grafico_fr_by_resultados(resultados, resultados_posibles, nombre_archivo):
+def get_graficos(resultados, resultados_posibles, nombre_archivo):
     lista_de_fr = []
+    lista_de_fondos = []
 
     #corridas para obtener valores
     for i in range(0, corridas_programa):
     
         lista_de_lista_de_resultados = []
         fr_obtenidas = []
+        fondos_obtenidos = []
 
         for y in range(1, max_tiradas+1):
             temporal_lista  = []
+            fondos_obtenidos.append(get_valor_fondos(resultados[i][y-1]))
 
             #analiza resultados incrementalmente
             for x in range(0, y):
@@ -421,6 +386,7 @@ def get_grafico_fr_by_resultados(resultados, resultados_posibles, nombre_archivo
             fr_obtenidas.append(get_fr_obtenida(lista_de_lista_de_resultados[y-1], resultados_posibles[0]))
 
         lista_de_fr.append(fr_obtenidas)
+        lista_de_fondos.append(fondos_obtenidos)
 
 
 
@@ -431,6 +397,7 @@ def get_grafico_fr_by_resultados(resultados, resultados_posibles, nombre_archivo
 
     #armado de graficos
     get_grafico_fr(tiradas, lista_de_fr, nombre_archivo)
+    get_grafico_fondos(tiradas, lista_de_fondos, nombre_archivo)
 
 
 def get_grafico_fr(tiradas, lista_de_fr, nombre_archivo):
@@ -450,6 +417,25 @@ def get_grafico_fr(tiradas, lista_de_fr, nombre_archivo):
     plt.ylabel("Frecuencias relativas")
     plt.title("Grafico frecuencias relativas "+str(nombre_archivo))
     plt.savefig("grafico-fr-relativas-"+str(nombre_archivo)+".svg")
+
+
+def get_grafico_fondos(tiradas, lista_de_valores, nombre_archivo):
+    df = pd.DataFrame(columns=tiradas, data=lista_de_valores)
+    
+    print(df)
+
+    names = []
+    cantidad_de_lineas = len(lista_de_valores)
+    for i in range(0, cantidad_de_lineas):
+            names.append('Fondos ' + str(i+1))
+
+    df = df.set_index([names])
+
+    df.T.plot()
+    plt.xlabel("Numero de tirada")
+    plt.ylabel("Fondo en $")
+    plt.title("Grafico fondos "+str(nombre_archivo))
+    plt.savefig("grafico-fondos-"+str(nombre_archivo)+".svg")
 
 
 
